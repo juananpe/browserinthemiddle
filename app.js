@@ -98,7 +98,12 @@ async function waitforit(_id, res) {
             function (err, doc) {
                 if (doc) {
                     if (!out){
-                        res.send(doc.data);
+                        if (doc.data === "404"){
+                            res.status(404)        // HTTP status 404: NotFound
+                                .send('Not found');
+                        } else {
+                            res.send(doc.data);
+                        }
                     }
                     out = true;
                 }
