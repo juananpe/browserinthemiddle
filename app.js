@@ -110,13 +110,16 @@ async function waitforit(_id, res) {
 
 }
 
-app.post('/proxy', function (req, res) {
+app.post('/*', function (req, res) {
+
+    console.log(req.url + req.text);
 
     // insert into mongo. get the _id
     const query = {
         text: req.text,
         create_time: new Date(),
-        has_ran: 'init'
+        has_ran: 'init',
+        to: req.url,
     };
 
     db.queries.insert(query, function (err, http) {
@@ -124,6 +127,7 @@ app.post('/proxy', function (req, res) {
             chromeSocket.emit("mensaje", {
                 text: req.text,
                 id: http._id,
+                to: req.url,
                 contentType: req.headers['content-type']
             });
         }

