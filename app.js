@@ -112,7 +112,7 @@ async function waitforit(_id, res) {
 
 }
 
-app.post('/proxy', function (req, res) {
+app.post('/*', function (req, res) {
 
     let payload=
         {"id":"1337","username":"guest","password":"h4x0r","email":"guest@where.ever","is_admin":"no"+ req.text };
